@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: devops-app
-        image: devops-app:latest
+        image: calculator-app:latest
         ports:
         - containerPort: 5000
 
