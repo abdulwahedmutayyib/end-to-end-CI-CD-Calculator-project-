@@ -1,6 +1,6 @@
 .git
-.gitignore
 .github
+.gitignore
 __pycache__/
 *.pyc
 *.pyo
