@@ -6,26 +6,30 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/api/calculate")
+@app.route("/")
 def home():
     return "Calculator App Running"
 
 
-@app.route("/calculate", methods=["GET"])
+@app.route("/api/calculate", methods=["GET"])
 def calc():
+
     expression = request.args.get("expr")
 
     if not expression:
         return jsonify({"error": "No expression provided"}), 400
 
     try:
+
         result = calculate(expression)
+
         return jsonify({
             "expression": expression,
             "result": result
         })
 
     except Exception as e:
+
         return jsonify({
             "error": str(e)
         }), 500
