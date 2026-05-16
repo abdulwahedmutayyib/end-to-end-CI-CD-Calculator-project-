@@ -1,6 +1,3 @@
-const API_BASE_URL = "http://192.168.49.2:30007";
-
-
 function appendValue(value) {
 
     document.getElementById("display").value += value;
@@ -24,7 +21,7 @@ async function calculateResult() {
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/calculate?expr=${encodeURIComponent(expression)}`
+            "/api/calculate?expr=" + encodeURIComponent(expression)
         );
 
         const data = await response.json();
