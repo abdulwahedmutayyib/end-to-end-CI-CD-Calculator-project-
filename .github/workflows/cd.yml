@@ -1,55 +1,47 @@
-name: Kubernetes CD Pipeline
+name: Python CI Pipeline
 
 on:
-  workflow_run:
-    workflows: ["Python CI Pipeline"]
-    types:
-      - completed
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
 
 jobs:
-  deploy:
-
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Backend Image
-      - name: Build Backend Docker Image
-        run: |
-          docker build -t wahed1321/calculator-app:latest .
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
 
-      - name: Push Backend Docker Image
+      - name: Install dependencies
         run: |
-          docker push wahed1321/calculator-app:latest
+          pip install -r requirements.txt
 
-      # Frontend Image
-      - name: Build Frontend Docker Image
+      - name: Run tests
         run: |
-          docker build -t wahed1321/calculator-frontend:latest ./frontend
+          pytest
 
-      - name: Push Frontend Docker Image
+      - name: Run flake8
         run: |
-          docker push wahed1321/calculator-frontend:latest
+          flake8 . --max-line-length=88
 
-      # Kubernetes Deployment
-      - name: Apply Kubernetes Files
-        run: |
-          kubectl apply -f k8s/
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: wahed1321
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Restart Backend Deployment
-        run: |
-          kubectl rollout restart deployment devops-app
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: wahed1321/calculator-app:latest
 
-      - name: Restart Frontend Deployment
-        run: |
-          kubectl rollout restart deployment frontend-app
-
-      - name: Verify Deployments
-        run: |
-          kubectl get pods
-          kubectl get svc
-          kubectl get ingress
