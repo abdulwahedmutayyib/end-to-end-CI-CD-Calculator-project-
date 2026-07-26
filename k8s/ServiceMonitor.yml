@@ -4,15 +4,12 @@ metadata:
   name: default-apps-monitor
   namespace: monitoring
   labels:
-    release: monitoring-kube-prometheus
+    release: monitoring
 spec:
-  # Kin namespaces me services ko dhundna hai
   namespaceSelector:
     matchNames:
       - default
-  # Selector logic: All services matching labels in default namespace
   selector: {}
   endpoints:
-  - port: http          # Service YAML me defined port ka name (e.g., 'http')
-    interval: 15s       # Kitni der me scrape karna hai
-    path: /metrics      # Metrics endpoint URL path
+  - port: http
+    interval: 15s
