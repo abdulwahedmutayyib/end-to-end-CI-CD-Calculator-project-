@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -44,4 +44,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: wahed1321/calculator-app:latest
+
 
