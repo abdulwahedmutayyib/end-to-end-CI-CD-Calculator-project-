@@ -15,7 +15,7 @@ spec:
       containers:
       - name: devops-app
         image: wahed1321/calculator-app:latest
-         imagePullPolicy: Always
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
           
